@@ -1,0 +1,257 @@
+openapi: 3.0.3
+info:
+  title: Django5 Test Swagger API
+  version: 1.0.0
+  description: Django5 Test Swagger API description
+paths:
+  /api/login/:
+    post:
+      operationId: api_login_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /api/students/:
+    post:
+      operationId: api_students_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentRegister'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentRegister'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentRegister'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentRegister'
+          description: ''
+  /api/students/{id}/:
+    get:
+      operationId: api_students_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentUpdate'
+          description: ''
+    put:
+      operationId: api_students_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/StudentUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/StudentUpdate'
+        required: true
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentUpdate'
+          description: ''
+    patch:
+      operationId: api_students_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedStudentUpdate'
+      security:
+      - basicAuth: []
+      - tokenAuth: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentUpdate'
+          description: ''
+components:
+  schemas:
+    Login:
+      type: object
+      properties:
+        name:
+          type: string
+        password:
+          type: string
+      required:
+      - name
+      - password
+    PatchedStudentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+        password:
+          type: string
+          title: Пароль
+          maxLength: 255
+        nickname_tg:
+          type: string
+          nullable: true
+          title: Никнейм Telegram
+          maxLength: 255
+        nickname_inst:
+          type: string
+          nullable: true
+          title: Никнейм Instagram
+          maxLength: 255
+    StatusEnum:
+      enum:
+      - Учится
+      - В академ. отпуске
+      - Возврат
+      - Закончил обучение
+      type: string
+      description: |-
+        * `Учится` - Учится
+        * `В академ. отпуске` - В академ. отпуске
+        * `Возврат` - Возврат
+        * `Закончил обучение` - Закончил обучение
+    StudentRegister:
+      type: object
+      properties:
+        name:
+          type: string
+          title: ФИО
+          maxLength: 255
+        password:
+          type: string
+          title: Пароль
+          maxLength: 255
+        status:
+          allOf:
+          - $ref: '#/components/schemas/StatusEnum'
+          title: Статус
+        level:
+          type: integer
+          nullable: true
+          title: Статус
+      required:
+      - name
+      - password
+      - status
+    StudentUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+        password:
+          type: string
+          title: Пароль
+          maxLength: 255
+        nickname_tg:
+          type: string
+          nullable: true
+          title: Никнейм Telegram
+          maxLength: 255
+        nickname_inst:
+          type: string
+          nullable: true
+          title: Никнейм Instagram
+          maxLength: 255
+      required:
+      - name
+      - password
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
+    tokenAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
