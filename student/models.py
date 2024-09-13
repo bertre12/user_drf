@@ -1,6 +1,8 @@
+from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 
 
+# Создание таблицы уровней.
 class Level(models.Model):
     LEVEL_CHOICES = [
         ('Студент', 'Студент'),
@@ -19,6 +21,7 @@ class Level(models.Model):
         verbose_name_plural = 'Уровень'
 
 
+# Создание таблицы студент.
 class Student(models.Model):
     STATUS_CHOICES = [
         ('Учится', 'Учится'),
@@ -49,6 +52,12 @@ class Student(models.Model):
 
     level = models.ForeignKey('Level', on_delete=models.CASCADE, null=True,
                               verbose_name='Статус')
+
+    def set_password(self, raw_password):
+        self.password = make_password(raw_password)
+
+    def check_password(self, raw_password):
+        return check_password(raw_password, self.password)
 
     class Meta:
         verbose_name = 'Студент'
