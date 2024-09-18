@@ -24,32 +24,15 @@ class LoginSerializer(serializers.Serializer):
     name = serializers.CharField()
     password = serializers.CharField()
 
-    # Для хэшированных паролей.
-    # def validate(self, attrs):
-    #     try:
-    #         student = Student.objects.get(name=attrs['name'])
-    #     except Student.DoesNotExist:
-    #         raise serializers.ValidationError(
-    #             'Неверное имя пользователя или пароль.')
-    #
-    #     if not student.check_password(attrs['password']):
-    #         raise serializers.ValidationError(
-    #             'Неверное имя пользователя или пароль.')
-    #
-    #     attrs['student'] = student
-    #     return attrs
-
-    # Проверка данных при входе.
+    # Проверка данных при входе с хэшированным паролей.
     def validate(self, attrs):
         try:
-            # Сравнение имени из бд.
             student = Student.objects.get(name=attrs['name'])
         except Student.DoesNotExist:
             raise serializers.ValidationError(
                 'Такого пользователя не существует.')
-
-        # Сравнение пароля из бд.
-        if student.password != attrs['password']:
+        # Проверка пароля с использованием метода check_password.
+        if not student.check_password(attrs['password']):
             raise serializers.ValidationError(
                 'Неверный пароль.')
 
