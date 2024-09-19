@@ -59,3 +59,17 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
 
     def get_name(self, obj):
         return f"{obj.name}"
+
+    def update(self, instance, validated_data):
+        # Удаление пароля из бд, чтоб не хранился в явном виде.
+        password = validated_data.pop('password', None)
+
+        # Обновление остальных редактируемых полей.
+        instance = super().update(instance, validated_data)
+
+        # Создание, хэширование и сохранение нового пароля.
+        if password:
+            instance.set_password(password)
+            instance.save()
+
+        return instance

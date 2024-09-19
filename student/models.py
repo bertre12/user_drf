@@ -53,6 +53,7 @@ class Student(models.Model):
     level = models.ForeignKey('Level', on_delete=models.CASCADE, null=True,
                               verbose_name='Статус')
 
+    # Хеширование пароля при создании нового пользователя.
     def set_password(self, raw_password):
         self.password = make_password(raw_password)
 
