@@ -32,7 +32,7 @@ class UserDelete(generics.RetrieveUpdateDestroyAPIView):
 
 # Вход в систему пользователей student из таблицы Student.
 class LoginView(generics.GenericAPIView):
-    queryset = User.objects.all()
+    queryset = Student.objects.all()
     serializer_class = LoginSerializer
     permission_classes = [AllowAny]
 
@@ -40,8 +40,16 @@ class LoginView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         student = serializer.validated_data['student']
+
+        # Сохранение информации о пользователе в сессии и его ID.
+        request.session['student_id'] = student.id
+        # Установка времени сессии (в секундах).
+        request.session.set_expiry(120)
+        session_time = 120
+
         # Информация после входа в систему.
-        return Response({'message': f'Вы вошли как {student.name}'})
+        return Response({'message': f'Вы вошли как {student.name}',
+                         'session_time': session_time})
 
 
 # Добавление нового пользователя student в таблице Student.

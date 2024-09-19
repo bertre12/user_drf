@@ -1,3 +1,5 @@
+import uuid
+
 from django.contrib.auth.hashers import make_password, check_password
 from django.db import models
 
@@ -47,8 +49,12 @@ class Student(models.Model):
                                            verbose_name='Количество баллов')
     status = models.CharField(max_length=100, verbose_name='Статус',
                               choices=STATUS_CHOICES)
-    package = models.CharField(max_length=255, verbose_name='Пакет')
+    package = models.CharField(max_length=255, null=True, blank=True,
+                               verbose_name='Пакет')
     internship = models.CharField(max_length=255, verbose_name='Стажировка')
+    session_id = models.UUIDField(default=uuid.uuid4, editable=False,
+                                  unique=True,
+                                  verbose_name='Идентификатор сессии')
 
     level = models.ForeignKey('Level', on_delete=models.CASCADE, null=True,
                               verbose_name='Статус')
