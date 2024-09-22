@@ -1,8 +1,13 @@
+import uuid
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, \
+    IsAuthenticated
+from rest_framework.views import APIView
+
 from .models import Student
 from .serializers import UserSerializer, LoginSerializer, \
     StudentUpdateSerializer, StudentRegisterSerializer
@@ -40,6 +45,10 @@ class LoginView(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         student = serializer.validated_data['student']
+
+        # Генерация уникального session_id при входе и сохранение в бд.
+        student.session_id = uuid.uuid4()
+        student.save()
 
         # Сохранение информации о пользователе в сессии и его ID.
         request.session['student_id'] = student.id
@@ -82,3 +91,26 @@ class StudentUpdateView(generics.RetrieveUpdateAPIView):
         elif self.request.method in ['PUT', 'PATCH']:
             return StudentUpdateSerializer
         return super().get_serializer_class()
+
+
+# Выход из системы.
+class LogoutView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        student_id = request.session.get('student_id')
+
+        if student_id:
+            # Получение объекта студент.
+            student = Student.objects.get(id=student_id)
+
+            # Очистка session_id.
+            student.session_id = None
+            student.save()
+
+            # Удаление информации о сессии и всех данных о пользователе.
+            request.session.flush()
+
+            return Response({'message': 'Вы вышли из системы.'}, status=200)
+        else:
+            return Response({'message': 'Вы не авторизованы.'}, status=400)

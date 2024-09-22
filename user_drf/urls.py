@@ -26,7 +26,7 @@ from drf_spectacular.views import (
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('student.urls')),  # Подключение адресов student.
-    # path('api-auth/', include('rest_framework.urls')),  # вход/выход для
+    path('api-auth/', include('rest_framework.urls')),  # вход/выход для
     # админов.
     path('api/schema/?format=json', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
