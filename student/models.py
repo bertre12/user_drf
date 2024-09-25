@@ -1,6 +1,6 @@
 import uuid
-
 from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
@@ -24,7 +24,7 @@ class Level(models.Model):
 
 
 # Создание таблицы студент.
-class Student(models.Model):
+class Student(AbstractUser):
     STATUS_CHOICES = [
         ('Учится', 'Учится'),
         ('В академ. отпуске', 'В академ. отпуске'),

@@ -121,6 +121,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+AUTH_USER_MODEL = 'student.Student'
+
 REST_FRAMEWORK = {
     # Подключение пагинации данных на странице для всего проекта.(глобально)
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

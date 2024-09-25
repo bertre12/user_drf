@@ -1,38 +1,13 @@
 import uuid
-
-from django.contrib.auth import authenticate, login
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth.models import User
-from rest_framework import generics, status
-from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny, \
-    IsAuthenticated
+from rest_framework import generics
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
-
 from .models import Student
-from .serializers import UserSerializer, LoginSerializer, \
-    StudentUpdateSerializer, StudentRegisterSerializer
+from .serializers import StudentUpdateSerializer, StudentRegisterSerializer, \
+    LoginSerializer
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-
-
-# Создание нового пользователя для всех.
-class CreateUserView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-# Отображение списка всех пользователей.
-class UserList(generics.ListAPIView):  # Только чтение.
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-
-# Создание, редактирование и удаление после входа в систему.
-class UserDelete(generics.RetrieveUpdateDestroyAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    # Добавление прав доступа.
-    permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
 # Вход в систему пользователей student из таблицы Student.
