@@ -33,6 +33,7 @@ class LoginView(generics.GenericAPIView):
 
         # Информация после входа в систему.
         return Response({'message': f'Вы вошли как {student.name}',
+                         'student.id': student.id,
                          'session_time': session_time})
 
 
@@ -43,10 +44,10 @@ class StudentCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         # Проверка на существование пользователя с таким же именем.
-        if Student.objects.filter(
-                name=serializer.validated_data['name']).exists():
+        name = serializer.validated_data['name']
+        if Student.objects.filter(name=name).exists():
             raise ValidationError(
-                {"name": "Пользователь с таким именем уже существует."})
+                {'name': 'Пользователь с таким именем уже существует.'})
 
         # Получаем данные.
         student = serializer.save()

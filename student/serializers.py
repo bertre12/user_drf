@@ -28,7 +28,7 @@ class StudentRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         # Поля для регистрации.
-        fields = ['name', 'password', 'status', 'level']
+        fields = ['name', 'username', 'password', 'status', 'level']
 
 
 # Изменение данных пользователя student в бд Student.
@@ -38,7 +38,8 @@ class StudentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
         # Поля для отображения и редактирования.
-        fields = ['name', 'password', 'nickname_tg', 'nickname_inst']
+        fields = ['name', 'image', 'password', 'phone', 'e_mail',
+                  'nickname_tg', 'nickname_inst']
 
     def get_name(self, obj):
         return f"{obj.name}"
