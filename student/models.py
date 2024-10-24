@@ -1,3 +1,4 @@
+import os
 import uuid
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import AbstractUser
@@ -59,6 +60,26 @@ class Student(AbstractUser):
 
     level = models.ForeignKey('Level', on_delete=models.CASCADE, null=True,
                               verbose_name='Статус')
+
+    # Перезапись фото в бд при добавлении/изменении фотографии.
+    def save(self, *args, **kwargs):
+        # Если объект уже существует (т.е. обновление)
+        if self.pk:
+            try:
+                old_image = Student.objects.get(pk=self.pk).image
+
+                # Удаляем старое фото, если оно существует и отличается от
+                # нового.
+                if old_image and old_image != self.image:
+                    if os.path.isfile(old_image.path):
+                        os.remove(old_image.path)
+
+            # Если фото нет, то ничего не делаем.
+            except Student.DoesNotExist:
+                pass
+
+        # Сохранения нового фото.
+        super().save(*args, **kwargs)
 
     # Хеширование пароля при создании нового пользователя.
     def set_password(self, raw_password):
