@@ -53,7 +53,8 @@ class StudentCreateView(generics.CreateAPIView):
         student = serializer.save()
         # Хэширование пароля.
         student.password = make_password(student.password)
-        student.save()
+        # Обновляем только поле пароля.
+        student.save(update_fields=['password'])
 
 
 # Редактирование пользователей student из таблицы Student.
