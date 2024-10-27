@@ -35,7 +35,7 @@ class Student(AbstractUser):
     ]
 
     name = models.CharField(max_length=255, verbose_name='ФИО')
-    image = models.ImageField(upload_to='static/images/', null=True,
+    image = models.ImageField(upload_to='images/', null=True,
                               verbose_name='Фото', validators=[validate_image])
     password = models.CharField(max_length=255, verbose_name='Пароль')
     phone = models.CharField(max_length=255, verbose_name='№ телефона',
