@@ -1,12 +1,11 @@
 Используемые адреса:
 	http://127.0.0.1:8000/api/login/
-	http://127.0.0.1:8000/api/students/
-	http://127.0.0.1:8000/api/students/{id}/
+	http://127.0.0.1:8000/api/create/
+	http://127.0.0.1:8000/api/update/{id}/
 
 Методы:
 	GET
 	POST
-	PUT
 	PATCH
 
 Коды ответов сервера:
@@ -36,7 +35,7 @@
 ответ сервера Code 200 и сообщение:
 
 	{
-	  "message": "Вы вошли как (имя пользователя)"
+	  "message": "You are logged in as (имя пользователя)"
 	}
 
 * При неправильном запросе формы, когда введено некорректный пароль:
@@ -46,7 +45,7 @@
 	Error: Bad Request
 	{
 	  "non_field_errors": [
-		""Неверный пароль.""
+		"Invalid password."
 	  ]
 	}
 
@@ -57,7 +56,7 @@
 	Error: Bad Request
 	{
 	  "non_field_errors": [
-		"Такого пользователя не существует."
+		"This user does not exist."
 	  ]
 	}
 
@@ -65,7 +64,7 @@
 
 Адрес
 
-	http://127.0.0.1:8000/api/students/
+	http://127.0.0.1:8000/api/create/
 
 осуществляет регистрацию нового пользователя.
 Используемый метод запроса - POST.
@@ -88,7 +87,7 @@
 	  "level": (выбранный уровень)
 	}
 
-* При неправильном запросе формы, когда когда введены некорректные данные в поле level:
+* При неправильном запросе формы, когда введены некорректные данные в поле level:
 
 ответ сервера Code 400 и сообщение:
 	Error: Bad Request
@@ -113,10 +112,10 @@
 
 Адрес
 
-http://127.0.0.1:8000/api/students/{id}/
+http://127.0.0.1:8000/api/update/{id}/
 
 осуществляет получение информации о пользователе, редактирования данных через {id} пользователя.
-Используемый метод запроса - GET, PUT, PATCH.
+Используемый метод запроса - GET, PATCH.
 
 1 - Метод GET.
 
@@ -124,8 +123,11 @@ http://127.0.0.1:8000/api/students/{id}/
 
 ответ сервера Code 200 и сообщение:
 	{
-	  "name": "(имя пользователя)",
-	  "password": "(пароль пользователя)",
+	  "name": "(username)",
+	  "image": null,
+	  "password": "(user password)",
+	  "phone": "",
+	  "e_mail": "",
 	  "nickname_tg": null,
 	  "nickname_inst": null
 	}
@@ -145,72 +147,36 @@ http://127.0.0.1:8000/api/students/{id}/
 	  "detail": "No Student matches the given query."
 	}
 
-2 - Метод PUT.
-
-* При запросе формы, с действующим {id} пользователя:
-
-	{
-	  "password": "(новый пароль)",
-	  "nickname_tg": "(новые данные)",
-	  "nickname_inst": "(новые данные)"
-	}
-
-ответ сервера Code 200 и сообщение:
-
-	{
-	  "password": "(новый пароль)",
-	  "nickname_tg": "(новые данные)",
-	  "nickname_inst": "(новые данные)"
-	}
-
-* При запросе формы, с действующим {id} пользователя, но с неуказанными данными или пробелами в поле: password, nickname_tg, nickname_inst:
-
-ответ сервера Code 400 и сообщение:
-
-	Error: Bad Request
-	{
-	  "password": [
-		"Это поле не может быть пустым."
-	  ],
-	  "nickname_tg": [
-		"Это поле не может быть пустым."
-	  ],
-	  "nickname_inst": [
-		"Это поле не может быть пустым."
-	  ]
-	}
 
 3 - Метод - PATCH.
 
 * При запросе формы, с действующим {id} пользователя:
 
 	{
-	  "password": "(новый пароль)",
-	  "nickname_tg": "(новые данные)",
-	  "nickname_inst": "(новые данные)"
+	  "image": "(new data)",
+	  "password": "(new password)",
+	  "phone": "(new data)",
+	  "e_mail": "(new data)",
+	  "nickname_tg": "(new data)",
+	  "nickname_inst": "(new data)"
 	}
 
 ответ сервера Code 200 и сообщение:
 
 	{
-	  "password": "(новый пароль)",
-	  "nickname_tg": "(новые данные)",
-	  "nickname_inst": "(новые данные)"
+	  "image": "(image address)",
+	  "password": "(new password)",
+	  "phone": "(new data)",
+	  "e_mail": "(new data)",
+	  "nickname_tg": "(new data)",
+	  "nickname_inst": "(new data)"
 	}
 	
-* При запросе формы, с действующим {id} пользователя, но с неуказанными данными или пробелами в поле: password, nickname_tg, nickname_inst:
+* При запросе формы, с действующим {id} пользователя, но с неуказанными данными или пробелами в поле: image, password, phone, e_mail, nickname_tg, nickname_inst:
 
 ответ сервера Code 400 и сообщение:
 
 	Error: Bad Request
 	{
-	  "password": [
-		"Это поле не может быть пустым."
-	  ],
-	  "nickname_tg": [
-		"Это поле не может быть пустым."
-	  ],
-	  "nickname_inst": [
-		"Это поле не может быть пустым."
-	  ]
+	This field cannot be empty: [image, password, phone, e_mail, nickname_tg, nickname_inst]
 	}

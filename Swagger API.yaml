@@ -4,40 +4,11 @@ info:
   version: 1.0.0
   description: Django5 Test Swagger API description
 paths:
-  /api/login/:
+  /api/create/:
     post:
-      operationId: api_login_create
+      operationId: api_create_create
       tags:
-      - api
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Login'
-          application/x-www-form-urlencoded:
-            schema:
-              $ref: '#/components/schemas/Login'
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/Login'
-        required: true
-      security:
-      - basicAuth: []
-      - tokenAuth: []
-      - cookieAuth: []
-      - {}
-      responses:
-        '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Login'
-          description: ''
-  /api/students/:
-    post:
-      operationId: api_students_create
-      tags:
-      - api
+        - api
       requestBody:
         content:
           application/json:
@@ -51,10 +22,10 @@ paths:
               $ref: '#/components/schemas/StudentRegister'
         required: true
       security:
-      - basicAuth: []
-      - tokenAuth: []
-      - cookieAuth: []
-      - {}
+        - basicAuth: [ ]
+        - tokenAuth: [ ]
+        - cookieAuth: [ ]
+        - { }
       responses:
         '201':
           content:
@@ -62,22 +33,63 @@ paths:
               schema:
                 $ref: '#/components/schemas/StudentRegister'
           description: ''
-  /api/students/{id}/:
-    get:
-      operationId: api_students_retrieve
-      parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
+  /api/login/:
+    post:
+      operationId: api_login_create
       tags:
-      - api
+        - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
       security:
-      - basicAuth: []
-      - tokenAuth: []
-      - cookieAuth: []
-      - {}
+        - basicAuth: [ ]
+        - tokenAuth: [ ]
+        - cookieAuth: [ ]
+        - { }
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Login'
+          description: ''
+  /api/logout/:
+    post:
+      operationId: api_logout_create
+      tags:
+        - api
+      security:
+        - basicAuth: [ ]
+        - tokenAuth: [ ]
+        - cookieAuth: [ ]
+      responses:
+        '200':
+          description: No response body
+  /api/update/{id}/:
+    get:
+      operationId: api_update_retrieve
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+      tags:
+        - api
+      security:
+        - basicAuth: [ ]
+        - tokenAuth: [ ]
+        - cookieAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -86,15 +98,15 @@ paths:
                 $ref: '#/components/schemas/StudentUpdate'
           description: ''
     put:
-      operationId: api_students_update
+      operationId: api_update_update
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
       tags:
-      - api
+        - api
       requestBody:
         content:
           application/json:
@@ -108,10 +120,10 @@ paths:
               $ref: '#/components/schemas/StudentUpdate'
         required: true
       security:
-      - basicAuth: []
-      - tokenAuth: []
-      - cookieAuth: []
-      - {}
+        - basicAuth: [ ]
+        - tokenAuth: [ ]
+        - cookieAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -120,15 +132,15 @@ paths:
                 $ref: '#/components/schemas/StudentUpdate'
           description: ''
     patch:
-      operationId: api_students_partial_update
+      operationId: api_update_partial_update
       parameters:
-      - in: path
-        name: id
-        schema:
-          type: integer
-        required: true
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
       tags:
-      - api
+        - api
       requestBody:
         content:
           application/json:
@@ -141,10 +153,10 @@ paths:
             schema:
               $ref: '#/components/schemas/PatchedStudentUpdate'
       security:
-      - basicAuth: []
-      - tokenAuth: []
-      - cookieAuth: []
-      - {}
+        - basicAuth: [ ]
+        - tokenAuth: [ ]
+        - cookieAuth: [ ]
+        - { }
       responses:
         '200':
           content:
@@ -162,17 +174,32 @@ components:
         password:
           type: string
       required:
-      - name
-      - password
+        - name
+        - password
     PatchedStudentUpdate:
       type: object
       properties:
         name:
           type: string
           readOnly: true
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Фото
         password:
           type: string
           title: Пароль
+          maxLength: 255
+        phone:
+          type: string
+          title: № телефона
+          description: '+375_________'
+          maxLength: 255
+        e_mail:
+          type: string
+          format: email
+          title: Электронная почта
           maxLength: 255
         nickname_tg:
           type: string
@@ -186,10 +213,10 @@ components:
           maxLength: 255
     StatusEnum:
       enum:
-      - Учится
-      - В академ. отпуске
-      - Возврат
-      - Закончил обучение
+        - Учится
+        - В академ. отпуске
+        - Возврат
+        - Закончил обучение
       type: string
       description: |-
         * `Учится` - Учится
@@ -203,31 +230,54 @@ components:
           type: string
           title: ФИО
           maxLength: 255
+        username:
+          type: string
+          title: Имя пользователя
+          description: Обязательное поле. Не более 150 символов. Только буквы, цифры
+            и символы @/./+/-/_.
+          pattern: ^[\w.@+-]+$
+          maxLength: 150
         password:
           type: string
           title: Пароль
           maxLength: 255
         status:
           allOf:
-          - $ref: '#/components/schemas/StatusEnum'
+            - $ref: '#/components/schemas/StatusEnum'
           title: Статус
         level:
           type: integer
           nullable: true
           title: Статус
       required:
-      - name
-      - password
-      - status
+        - name
+        - password
+        - status
+        - username
     StudentUpdate:
       type: object
       properties:
         name:
           type: string
           readOnly: true
+        image:
+          type: string
+          format: uri
+          nullable: true
+          title: Фото
         password:
           type: string
           title: Пароль
+          maxLength: 255
+        phone:
+          type: string
+          title: № телефона
+          description: '+375_________'
+          maxLength: 255
+        e_mail:
+          type: string
+          format: email
+          title: Электронная почта
           maxLength: 255
         nickname_tg:
           type: string
@@ -240,8 +290,10 @@ components:
           title: Никнейм Instagram
           maxLength: 255
       required:
-      - name
-      - password
+        - e_mail
+        - name
+        - password
+        - phone
   securitySchemes:
     basicAuth:
       type: http

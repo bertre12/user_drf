@@ -6,6 +6,58 @@
     "description": "Django5 Test Swagger API description"
   },
   "paths": {
+    "/api/create/": {
+      "post": {
+        "operationId": "api_create_create",
+        "tags": [
+          "api"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentRegister"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentRegister"
+              }
+            },
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/StudentRegister"
+              }
+            }
+          },
+          "required": true
+        },
+        "security": [
+          {
+            "basicAuth": []
+          },
+          {
+            "tokenAuth": []
+          },
+          {
+            "cookieAuth": []
+          },
+          {}
+        ],
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StudentRegister"
+                }
+              }
+            },
+            "description": ""
+          }
+        }
+      }
+    },
     "/api/login/": {
       "post": {
         "operationId": "api_login_create",
@@ -42,9 +94,7 @@
           {
             "cookieAuth": []
           },
-          {
-
-          }
+          {}
         ],
         "responses": {
           "200": {
@@ -60,32 +110,12 @@
         }
       }
     },
-    "/api/students/": {
+    "/api/logout/": {
       "post": {
-        "operationId": "api_students_create",
+        "operationId": "api_logout_create",
         "tags": [
           "api"
         ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/StudentRegister"
-              }
-            },
-            "application/x-www-form-urlencoded": {
-              "schema": {
-                "$ref": "#/components/schemas/StudentRegister"
-              }
-            },
-            "multipart/form-data": {
-              "schema": {
-                "$ref": "#/components/schemas/StudentRegister"
-              }
-            }
-          },
-          "required": true
-        },
         "security": [
           {
             "basicAuth": []
@@ -95,28 +125,18 @@
           },
           {
             "cookieAuth": []
-          },
-          {
-
           }
         ],
         "responses": {
-          "201": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/StudentRegister"
-                }
-              }
-            },
-            "description": ""
+          "200": {
+            "description": "No response body"
           }
         }
       }
     },
-    "/api/students/{id}/": {
+    "/api/update/{id}/": {
       "get": {
-        "operationId": "api_students_retrieve",
+        "operationId": "api_update_retrieve",
         "parameters": [
           {
             "in": "path",
@@ -140,9 +160,7 @@
           {
             "cookieAuth": []
           },
-          {
-
-          }
+          {}
         ],
         "responses": {
           "200": {
@@ -158,7 +176,7 @@
         }
       },
       "put": {
-        "operationId": "api_students_update",
+        "operationId": "api_update_update",
         "parameters": [
           {
             "in": "path",
@@ -202,9 +220,7 @@
           {
             "cookieAuth": []
           },
-          {
-
-          }
+          {}
         ],
         "responses": {
           "200": {
@@ -220,7 +236,7 @@
         }
       },
       "patch": {
-        "operationId": "api_students_partial_update",
+        "operationId": "api_update_partial_update",
         "parameters": [
           {
             "in": "path",
@@ -263,9 +279,7 @@
           {
             "cookieAuth": []
           },
-          {
-
-          }
+          {}
         ],
         "responses": {
           "200": {
@@ -306,9 +320,27 @@
             "type": "string",
             "readOnly": true
           },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "title": "Фото"
+          },
           "password": {
             "type": "string",
             "title": "Пароль",
+            "maxLength": 255
+          },
+          "phone": {
+            "type": "string",
+            "title": "№ телефона",
+            "description": "+375_________",
+            "maxLength": 255
+          },
+          "e_mail": {
+            "type": "string",
+            "format": "email",
+            "title": "Электронная почта",
             "maxLength": 255
           },
           "nickname_tg": {
@@ -343,6 +375,13 @@
             "title": "ФИО",
             "maxLength": 255
           },
+          "username": {
+            "type": "string",
+            "title": "Имя пользователя",
+            "description": "Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.",
+            "pattern": "^[\\w.@+-]+$",
+            "maxLength": 150
+          },
           "password": {
             "type": "string",
             "title": "Пароль",
@@ -365,7 +404,8 @@
         "required": [
           "name",
           "password",
-          "status"
+          "status",
+          "username"
         ]
       },
       "StudentUpdate": {
@@ -375,9 +415,27 @@
             "type": "string",
             "readOnly": true
           },
+          "image": {
+            "type": "string",
+            "format": "uri",
+            "nullable": true,
+            "title": "Фото"
+          },
           "password": {
             "type": "string",
             "title": "Пароль",
+            "maxLength": 255
+          },
+          "phone": {
+            "type": "string",
+            "title": "№ телефона",
+            "description": "+375_________",
+            "maxLength": 255
+          },
+          "e_mail": {
+            "type": "string",
+            "format": "email",
+            "title": "Электронная почта",
             "maxLength": 255
           },
           "nickname_tg": {
@@ -394,8 +452,10 @@
           }
         },
         "required": [
+          "e_mail",
           "name",
-          "password"
+          "password",
+          "phone"
         ]
       }
     },
