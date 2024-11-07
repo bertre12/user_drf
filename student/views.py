@@ -28,11 +28,12 @@ class LoginView(generics.GenericAPIView):
         # Сохранение информации о пользователе в сессии и его ID.
         request.session['student_id'] = student.id
         # Установка времени сессии (в секундах).
-        request.session.set_expiry(120)
-        session_time = 120
+        request.session.set_expiry(600)
+        session_time = 600
 
         # Информация после входа в систему.
-        return Response({'message': f'Вы вошли как {student.name}',
+        # Вы вошли в систему как
+        return Response({'message': f'You are logged in as {student.name}',
                          'student.id': student.id,
                          'session_time': session_time})
 
@@ -46,8 +47,9 @@ class StudentCreateView(generics.CreateAPIView):
         # Проверка на существование пользователя с таким же именем.
         name = serializer.validated_data['name']
         if Student.objects.filter(name=name).exists():
+            # Пользователь с таким именем уже существует.
             raise ValidationError(
-                {'name': 'Пользователь с таким именем уже существует.'})
+                {'name': 'A user with this name already exists.'})
 
         # Получаем данные.
         student = serializer.save()
@@ -65,7 +67,7 @@ class StudentUpdateView(generics.RetrieveUpdateAPIView):
     def get_serializer_class(self):
         if self.request.method == 'POST':
             return StudentRegisterSerializer
-        elif self.request.method in ['PUT', 'PATCH']:
+        elif self.request.method == 'PATCH':
             return StudentUpdateSerializer
         return super().get_serializer_class()
 
@@ -88,6 +90,8 @@ class LogoutView(APIView):
             # Удаление информации о сессии и всех данных о пользователе.
             request.session.flush()
 
-            return Response({'message': 'Вы вышли из системы.'}, status=200)
+            # Вы вышли из системы.
+            return Response({'message': 'You are logged out.'}, status=200)
         else:
-            return Response({'message': 'Вы не авторизованы.'}, status=400)
+            # Вы не авторизованы.
+            return Response({'message': 'You are not authorized.'}, status=400)

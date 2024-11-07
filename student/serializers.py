@@ -12,12 +12,14 @@ class LoginSerializer(serializers.Serializer):
         try:
             student = Student.objects.get(name=attrs['name'])
         except Student.DoesNotExist:
+            # Такого пользователя не существует.
             raise serializers.ValidationError(
-                'Такого пользователя не существует.')
+                'This user does not exist.')
         # Проверка пароля с использованием метода check_password.
         if not student.check_password(attrs['password']):
+            # Неверный пароль.
             raise serializers.ValidationError(
-                'Неверный пароль.')
+                'Invalid password.')
 
         attrs['student'] = student
         return attrs

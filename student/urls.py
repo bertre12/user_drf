@@ -7,9 +7,9 @@ urlpatterns = [
     path('login/', LoginView.as_view(), name='login'),  # Вход в систему для
     # пользователей student из бд Student.
     path('logout/', LogoutView.as_view(), name='logout'),
-    path('students/', StudentCreateView.as_view(), name='create-student'),
+    path('create/', StudentCreateView.as_view(), name='create-student'),
     # Регистрация нового пользователя student в бд Student.
-    path('students/<int:pk>/', StudentUpdateView.as_view(),
+    path('update/<int:pk>/', StudentUpdateView.as_view(),
          name='update-student'),  # Редактирование данных пользователя
     # student в бд Student.
 ]
