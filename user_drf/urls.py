@@ -29,6 +29,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('student.urls')),  # Подключение адресов student.
+    path('api/tasks/', include('tasks.urls')),  # Подключение адресов tasks.
     path('api-auth/', include('rest_framework.urls')),  # вход/выход для
     # админов.
     path('api/schema/?format=json', SpectacularAPIView.as_view(), name='schema'),
