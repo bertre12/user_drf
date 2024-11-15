@@ -41,6 +41,8 @@ class StudentTasksView(APIView):
         # Формирование ответа на запрос.
         response_data = {
             'student_name': student.name,
+            'student_image': request.build_absolute_uri(
+                student.image.url) if student.image else None,
             'tasks': serializer.data
         }
 
