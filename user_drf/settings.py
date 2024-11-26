@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'drf_spectacular',
     'tasks.apps.TasksConfig',
+    'point.apps.PointConfig',
 ]
 
 MIDDLEWARE = [
