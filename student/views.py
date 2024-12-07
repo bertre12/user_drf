@@ -4,6 +4,7 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.views import APIView
 from .models import Student
+from .permissions import IsOwner
 from .serializers import StudentUpdateSerializer, StudentRegisterSerializer, \
     LoginSerializer
 from rest_framework.response import Response
@@ -63,6 +64,11 @@ class StudentCreateView(generics.CreateAPIView):
 class StudentUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Student.objects.all()
     serializer_class = StudentUpdateSerializer
+    permission_classes = [IsOwner]
+
+    # Ограничение на редактирование только текущему пользователю.
+    def get_queryset(self):
+        return self.queryset.filter(id=self.request.user.id)
 
     def get_serializer_class(self):
         if self.request.method == 'POST':
