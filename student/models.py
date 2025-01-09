@@ -34,6 +34,12 @@ class Student(AbstractUser):
         ('Закончил обучение', 'Закончил обучение'),
     ]
 
+    # class Status(models.IntegerChoices):
+    #     STUDYING = 1, 'Учится'
+    #     ACADEMIC_LEAVE = 2, 'В академ. отпуске'
+    #     RETURN = 3, 'Возврат'
+    #     GRADUATED = 4, 'Закончил обучение'
+
     name = models.CharField(max_length=255, verbose_name='ФИО')
     image = models.ImageField(upload_to='images/', null=True,
                               verbose_name='Фото', validators=[validate_image])
@@ -51,6 +57,9 @@ class Student(AbstractUser):
                                            verbose_name='Количество баллов')
     status = models.CharField(max_length=100, verbose_name='Статус',
                               choices=STATUS_CHOICES)
+    # status = models.IntegerField(choices=Status.choices,
+    #                              default=Status.STUDYING,
+    #                              verbose_name='Статус')
     package = models.CharField(max_length=255, null=True, blank=True,
                                verbose_name='Пакет')
     internship = models.CharField(max_length=255, verbose_name='Стажировка')

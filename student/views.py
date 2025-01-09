@@ -9,6 +9,10 @@ from .serializers import StudentUpdateSerializer, StudentRegisterSerializer, \
     LoginSerializer
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+import logging
+
+# Создание логгера.
+logger = logging.getLogger(__name__)
 
 
 # Вход в систему пользователей student из таблицы Student.
@@ -31,6 +35,9 @@ class LoginView(generics.GenericAPIView):
         # Установка времени сессии (в секундах).
         request.session.set_expiry(600)
         session_time = 600
+
+        # Добавление логгера.
+        logger.info(f'Вход пользователя {student.name} в систему.')
 
         # Информация после входа в систему.
         # Вы вошли в систему как

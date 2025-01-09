@@ -159,3 +159,54 @@ SPECTACULAR_SETTINGS = {
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
+
+# Подключение логирования.
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            # Формат логов.
+            'format': '%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            'datefmt': '%d.%m.%y %H:%M:%S',
+        },
+    },
+    # Направление сообщений логов.
+    'handlers': {
+        # Отображение логов в консоль.
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        # Запись логов в указанный файл.
+        'file': {
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'project_log.log'),
+            'mode': 'a',
+            'formatter': 'verbose',
+            # Установка кодировки UTF-8.
+            'encoding': 'utf-8',
+        },
+    },
+    # Зарегистрированные логгеры в приложении.
+    'loggers': {
+        'django': {
+            # Отображение логгера( консоль и запись в файл).
+            'handlers': ['console', 'file'],
+            # Уровень логгера.
+            'level': 'INFO',
+        },
+        'student': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'tasks': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+        'point': {
+            'handlers': ['console', 'file'],
+            'level': 'DEBUG',
+        },
+    },
+}
